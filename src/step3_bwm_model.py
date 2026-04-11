@@ -118,6 +118,7 @@ class BWMCalculator:
         xi_star = res.x[-1]
         
         # Zip into a clean dictionary
+        weights_dict = {self.criteria[i]: round(optimal_weights[i], 4) for i in range(self.n)}
 
         # 8. Calculate Consistency Ratio (CR)
         # Find the maximum preference value used in the BO vector to get the correct CI
