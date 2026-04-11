@@ -168,8 +168,6 @@ class DataTransformer:
         script_dir = Path(__file__).resolve()
         csv_path = script_dir.parent.parent / csv_path
 
-        print(csv_path)
-
         df_raw = pd.read_csv(csv_path, delimiter=delimiter)
         
         # 3. Preserve identifiers safely (dynamically)
@@ -192,7 +190,7 @@ class DataTransformer:
         return df
 
 # =============================================================================
-# EXECUTION BLOCK
+# EXECUTION BLOCK (For Testing)
 # =============================================================================
 if __name__ == "__main__":
     transformer = DataTransformer(config_name='step1_features_config.yaml', max_budget=105000)

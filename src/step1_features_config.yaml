@@ -87,3 +87,42 @@ continuous_normalization:
     - "payload_capacity"
     - "aesthetics"
     - "freshness"
+
+criteria_groups:
+  cost:
+    - "cost"
+    - "warranty"
+    - "city_fuel_economy"
+    - "highway_fuel_economy"
+
+  safety:
+    - "airbag"
+    - "rear_view_camera"
+    - "rear_parking_sensors"
+    - "tire_pressure_sensor"
+
+  performance:
+    - "engine"
+    - "horsepower"
+    - "torque"
+    - "ground_clearance"
+    - "payload_capacity"
+
+  comfort:
+    - "air_conditioning"
+    - "infotainment_system"
+    - "keyless"
+    - "steering_wheel_adjustment"
+    - "power_windows"
+    - "power_side_mirrors"
+    - "cruise_control"
+
+  aesthetics:
+    - "alloy_wheels"
+    - "led_headlights"
+    - "fog_lights"
+    - "twilight_sensor"
+    - "roof_rails"
+    - "tow_hitch"
+    - "freshness"
+    - "aesthetics"

@@ -1,6 +1,6 @@
 """
 =============================================================================
-PHASE 4: SIMPLE ADDITIVE WEIGHTING (SAW) AGGREGATION
+PHASE 5: SIMPLE ADDITIVE WEIGHTING (SAW) AGGREGATION
 =============================================================================
 This module takes the normalized mathematical matrix (Phase 2) and the 
 user's criteria weights (Phase 3), multiplying them to generate the 
