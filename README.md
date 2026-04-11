@@ -73,7 +73,7 @@ car-selection-mcda/
 │   └── TECH-SPEC.md           # Technical Specification
 ├── notebooks/                 # Prototyping Notebooks
 ├── src/                       # Pipeline Source Code
-│   ├── step1_features_config.yaml   # Feature Engineering Config
+│   ├── step1_features_config.yaml   # Feature Engineering Config (Phase 1)
 │   ├── step2_transformation.py      # Cleaning and Normalization (Phase 2)
 │   ├── step3_bwm_model.py           # BWM Weight Calculation (Phase 3)
 │   └── step4_saw_aggregation.py     # Final Scoring and Ranking (Phase 4)
