@@ -108,19 +108,21 @@ class BWMCalculator:
         res = linprog(c, A_ub=A_ub, b_ub=b_ub, A_eq=A_eq, b_eq=b_eq, bounds=bounds, method='highs')
 
         if not res.success:
-            raise Exception("Linear programming optimization failed. Please check your BO and OW vectors.")
+            raise Exception(
+                f"Linear programming optimization failed: {res.message}. "
+                "Please check your BO and OW vectors."
+            )
 
         # 7. Extract Results
         optimal_weights = res.x[:self.n]
         xi_star = res.x[-1]
         
         # Zip into a clean dictionary
-        weights_dict = {self.criteria[i]: round(optimal_weights[i], 4) for i in range(self.n)}
-        
+
         # 8. Calculate Consistency Ratio (CR)
-        # Find the max preference value used (a_BW) to get the corresponding CI
-        a_bw = bo_vector[worst_criterion]
-        ci = self.ci_table.get(a_bw, self.ci_table[9]) # Default to max if out of bounds
+        # Find the maximum preference value used in the BO vector to get the correct CI
+        max_preference = max(bo_vector.values())
+        ci = self.ci_table.get(max_preference, self.ci_table.get(9)) # Default to max if out of bounds        
         
         consistency_ratio = xi_star / ci if ci != 0 else 0.0
 
