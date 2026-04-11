@@ -1,0 +1,89 @@
+# =============================================================================
+# PHASE 1: DATA MAPPING & FEATURE ENGINEERING CONFIGURATION
+# =============================================================================
+# This file is the Single Source of Truth for the MCDA data pipeline.
+# It defines how raw data from the CSV is transformed into the mathematical matrix.
+
+pipeline_info:
+  source_file: "data/car_database.csv"
+  delimiter: ";"
+  id_columns: 
+    - "car"
+    - "version"
+  target_output: "Normalized Mathematical Matrix (0.0 to 1.0) for MCDA"
+
+hard_constraints:
+  - feature: "cost"
+    condition: "<="
+    value: "USER_DEFINED_MAX_BUDGET"
+
+dropped_columns:
+  business_exclusions: []
+
+conditional_logic:
+  - feature: "fog_lights"
+    rule: "If fog_lights is NaN -> 1.0"
+    action: "FILL_NULL"
+    value: 1.0
+    
+  - feature: "rear_view_camera"
+    rule: "If rear_parking_sensors is True OR rear_view_camera is True -> 1.0. Else -> 0.0"
+    action: "OR_GATE"
+    dependencies: ["rear_view_camera", "rear_parking_sensors"]
+    
+  - feature: "rear_parking_sensors"
+    rule: "If rear_view_camera is True OR rear_parking_sensors is True -> 1.0. Else -> 0.0"
+    action: "OR_GATE"
+    dependencies: ["rear_view_camera", "rear_parking_sensors"]
+
+# Non-Linear Utility Mapping (Discretization)
+utility_mapping:
+  airbag:
+    2: { score: 0.5, justification: "Core safety requirement met (driver + passenger)." }
+    4: { score: 0.8, justification: "Significant lateral safety bonus." }
+    6: { score: 1.0, justification: "Maximum safety tier; marginal gain over 4 is smaller." }
+  air_conditioning:
+    manual: { score: 0.8, justification: "Fulfills the primary thermal need (heating/cooling)." }
+    digital: { score: 1.0, justification: "Provides convenience/automation bonus." }
+  power_windows:
+    front: { score: 0.7, justification: "Covers the most frequent use-case (driver/passenger)." }
+    front and rear: { score: 1.0, justification: "Full convenience." }
+  steering_wheel_adjustment:
+    none: { score: 0.0, justification: "Ergonomic deficit." }
+    tilt: { score: 0.5, justification: "Basic height adjustment." }
+    tilt and telescopic: { score: 1.0, justification: "Perfect ergonomic fit." }
+  ground_clearance:
+    low: { score: 0.5, justification: "Sufficient for urban use." }
+    medium: { score: 0.8, justification: "Better for mixed conditions." }
+    high: { score: 1.0, justification: "Optimal for rough terrain; marginal gain over medium is smaller." }
+
+# Direct Boolean to Numeric (True -> 1.0, False -> 0.0)
+direct_binarization:
+  - "cruise_control"
+  - "infotainment_system"
+  - "keyless"
+  - "leather_seats"
+  - "leather_steering_wheel"
+  - "power_side_mirrors"
+  - "tire_pressure_sensor"
+  - "twilight_sensor"
+  - "led_headlights"
+  - "roof_rails"
+  - "alloy_wheels"
+  - "tow_hitch"
+  - "fog_lights"
+
+# Min-Max Scaler Configurations
+continuous_normalization:
+  minimization_costs:
+    - "cost"
+  maximization_benefits:
+    - "warranty"
+    - "engine"
+    - "horsepower"
+    - "torque"
+    - "city_fuel_economy"
+    - "highway_fuel_economy"
+    - "payload_capacity"
+    - "aesthetics"
+    - "freshness"
