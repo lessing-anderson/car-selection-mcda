@@ -28,21 +28,31 @@ This phase transforms variables of different magnitudes (Monetary Values, Horsep
     * *Maximization (Benefits):* Focused on the highest value.
     * *Minimization (Costs):* Inverted formula, where the lowest raw value (e.g., the lowest price) receives the score closest to $1.0$.
 
-### Phase 3: Preference Elicitation (Weighting via Best-Worst Method - BWM)
-Module dedicated to the algorithmic extraction of the decision-maker's preference function, replacing the traditional AHP method to handle high-dimensionality matrices.
+### Phase 3.A: Macro-Level Preference Elicitation (Best-Worst Method)
+Module dedicated to the algorithmic extraction of the decision-maker's preference function. To prevent cognitive overload and Consistency Ratio (CR) explosion in high-dimensional matrices (25+ variables), the traditional linear BWM is elevated to a hierarchical architecture.
 
-* **Best-Worst Identification:** The user defines, among the set of criteria, the Absolutely Best/Most Important (*Best*) and the Absolutely Worst/Least Important (*Worst*).
+* **Categorical Grouping:** The criteria space ($C$) is logically clustered into 5 to 7 Macro Categories (e.g., *Cost, Safety, Performance, Comfort*).
+* **Best-Worst Identification:** The user defines the Absolutely Best/Most Important (*Best*) and the Absolutely Worst/Least Important (*Worst*) **exclusively** at the Macro Category level.
 * **Preference Vectorization (Scale of 1 to 9):**
-    * *Best-to-Others Vector:* Degree of superiority of the *Best* criterion over all others.
-    * *Others-to-Worst Vector:* Degree of superiority of each criterion over the *Worst* criterion.
-* **Minimax Optimization (*Weight Extraction*):** Mathematical processing of the vectors through a solver to minimize the inconsistency error. Generates a global vector of calibrated weights ($W$), ensuring that the mathematical sum is strictly equal to $1$ (or $100\%$).
+    * *Best-to-Others Vector:* Degree of superiority of the *Best* category over all others.
+    * *Others-to-Worst Vector:* Degree of superiority of each category over the *Worst* category.
+* **Minimax Optimization (*Weight Extraction*):** Mathematical processing of the vectors through a solver (SciPy linear programming) to minimize the inconsistency error. Generates a calibrated vector of **Macro Weights** ($W_{Macro}$), ensuring their sum equals $1.0$.
+
+### Phase 3.B: Micro-Level Aggregation (Hierarchical Weighting)
+The architectural bridge that translates the user's high-level cognitive decisions into the granular feature matrix required for SAW.
+
+* **Equal Split Distribution (Default Policy):** Within each category, the calculated $W_{Macro}$ is distributed equally among its constituent features ($1/n$). 
+* **Micro-BWM Overrides (Power User Specification):** The system permits the optional injection of local weights. A user can bypass the equal split by dictating specific intra-category preferences (e.g., stating that *Airbags* hold 80% of the *Safety* category's importance).
+* **Absolute Weight Calculation:** The engine computes the final, global weight for every individual feature ($i$) belonging to category ($C$) using the multiplicative rule:
+    * $$Absolute\_Weight_i = W_{Macro\_C} \times W_{Micro\_i}$$
+    * *Constraint:* The sum of all absolute weights across the entire dataset remains strictly equal to $1.0$.
 
 ### Phase 4: Multicriteria Aggregation (Scoring via Simple Additive Weighting - SAW)
-The crossover phase where the transformed data and the assigned weights are integrated for decision-making.
+The crossover phase where the transformed data matrix and the absolute weights are integrated for final decision-making.
 
-* **Weighted Sum Calculation:** The algorithm iterates over each valid alternative ($A_i$). The normalized score of each criterion ($x_{ij}$) is multiplied by its respective global weight ($w_j$), obtaining the total sum.
-* **Fundamental Equation:** $$Score_{Global} = \sum_{j=1}^{n} (x_{ij} \times w_j)$$
-* **Sorting / Ranking:** The final output is a dataset sorted in descending order by the $Score_{Global}$. The element positioned at Rank 1 represents the mathematical optimum of Cost-Benefit given the parameterized constraints.
+* **Weighted Sum Calculation:** The algorithm iterates over each valid alternative ($A_k$). The normalized score of each criterion ($x_{ki}$) is multiplied by its respective absolute weight ($Absolute\_Weight_i$), obtaining the total sum.
+* **Fundamental Equation:** $$Score_{Global} = \sum_{i=1}^{n} (x_{ki} \times Absolute\_Weight_i)$$
+* **Sorting / Ranking:** The final output is a dataset sorted in descending order by the $Score_{Global}$. The element positioned at Rank 1 represents the mathematical optimum of Cost-Benefit given the user's hierarchical preference profile and hard constraints.
 
 ### Phase 5: Sensitivity Analysis [Optional/Audit]
 Post-processing auditing layer for risk validation in decision-making.
