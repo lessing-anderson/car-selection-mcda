@@ -89,7 +89,7 @@ if __name__ == "__main__":
     with open("temp_mock.yaml", "w") as f: f.write(mock_yaml)
     
     # 1. Initialize Aggregator
-    aggregator = HierarchicalAggregator(config_name="step1_features_config.yaml")
+    aggregator = HierarchicalAggregator(config_name="temp_mock.yaml")
     
     # 2. Imagine the BWM calculated these Macro Weights (Sum = 1.0)
     macro_bwm = {
