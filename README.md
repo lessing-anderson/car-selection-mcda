@@ -23,7 +23,7 @@ The solution was developed as a **Hybrid Pipeline** that combines rigorous Featu
 3. **Best-Worst Method (BWM):** Mathematical elicitation of user preferences, calculating the exact weight vector through minimax optimization (replacing the impractical AHP for high dimensionality).
 4. **Simple Additive Weighting (SAW):** Final aggregation of the normalized scores against the BWM weight matrix, ranking the vehicles by the mathematical optimum of Cost-Benefit.
 
-> **📄 For in-depth mathematical details regarding utility functions and model architecture, please refer to the [Technical Specification (TECH_SPEC.md)](docs/TECH_SPEC.md).**
+> **📄 For in-depth mathematical details regarding utility functions and model architecture, please refer to the [Technical Specification (TECH-SPEC.md)](docs/TECH-SPEC.md).**
 
 ---
 
@@ -75,7 +75,8 @@ car-selection-mcda/
 ├── src/                       # Pipeline Source Code
 │   ├── step1_features_config.yaml   # Feature Engineering Config (Phase 1)
 │   ├── step2_transformation.py      # Cleaning and Normalization (Phase 2)
-│   ├── step3_bwm_model.py           # BWM Weight Calculation (Phase 3)
+│   ├── step3a_bwm_model.py          # BWM Weight Calculation (Phase 3a)
+│   ├── step3b_hierarchical_bwm.py   # Hierarquical BWM Calculation (Phase 3b)
 │   └── step4_saw_aggregation.py     # Final Scoring and Ranking (Phase 4)
 ├── data/                      # Input dataset
 │   └── car_database.csv       
@@ -87,7 +88,6 @@ car-selection-mcda/
 
 - [ ] Implement sensitivity analysis via matrix perturbation (+/- 5% on macro weights).
 - [ ] Incorporate the PROMETHEE II outranking method to entirely avoid the compensatory effect of the SAW algorithm.
-- [ ] Create an interactive web interface using Streamlit for visual input of Best and Worst criteria.
 
 
 ------------------

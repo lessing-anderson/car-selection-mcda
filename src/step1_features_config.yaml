@@ -56,6 +56,9 @@ utility_mapping:
     low: { score: 0.5, justification: "Sufficient for urban use." }
     medium: { score: 0.8, justification: "Better for mixed conditions." }
     high: { score: 1.0, justification: "Optimal for rough terrain; marginal gain over medium is smaller." }
+  transmission:
+    manual: { score: 0.5, justification: "Fulfills the primary use case." }
+    automatic: { score: 1.0, justification: "Provides convenience/automation bonus." }
 
 # Direct Boolean to Numeric (True -> 1.0, False -> 0.0)
 direct_binarization:
@@ -91,6 +94,7 @@ continuous_normalization:
 criteria_groups:
   cost:
     - "cost"
+    - "freshness"
     - "warranty"
     - "city_fuel_economy"
     - "highway_fuel_economy"
@@ -116,13 +120,13 @@ criteria_groups:
     - "power_windows"
     - "power_side_mirrors"
     - "cruise_control"
+    - "transmission"
+    - "twilight_sensor"    
 
   aesthetics:
     - "alloy_wheels"
     - "led_headlights"
     - "fog_lights"
-    - "twilight_sensor"
     - "roof_rails"
     - "tow_hitch"
-    - "freshness"
     - "aesthetics"
