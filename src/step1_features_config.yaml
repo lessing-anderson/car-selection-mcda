@@ -46,6 +46,7 @@ utility_mapping:
     manual: { score: 0.8, justification: "Fulfills the primary thermal need (heating/cooling)." }
     digital: { score: 1.0, justification: "Provides convenience/automation bonus." }
   power_windows:
+    none: { score: 0.0, justification: "Dont have." }
     front: { score: 0.7, justification: "Covers the most frequent use-case (driver/passenger)." }
     front and rear: { score: 1.0, justification: "Full convenience." }
   steering_wheel_adjustment:
